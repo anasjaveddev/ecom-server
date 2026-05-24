@@ -1,6 +1,11 @@
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema(
+  role: {
+  type: String,
+  enum: ['customer', 'seller'],
+  default: 'customer'
+}
   {
     name: {
       type: String,
