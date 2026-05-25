@@ -1,8 +1,8 @@
 {
-  "name": "mern-catalogue-backend",
+  "name": "ecom-backend",
   "version": "1.0.0",
   "type": "module",
-  "description": "MERN Catalogue Backend with Auth",
+  "description": "E-Commerce Backend with Auth & CORS fix",
   "main": "index.mjs",
   "scripts": {
     "start": "node index.mjs",
@@ -10,11 +10,13 @@
   },
   "dependencies": {
     "express": "^4.18.2",
-    "mongoose": "^7.0.0",
+    "mongoose": "^8.0.0",
     "cors": "^2.8.5",
-    "dotenv": "^16.0.3",
+    "dotenv": "^16.3.1",
     "bcryptjs": "^2.4.3",
-    "jsonwebtoken": "^9.0.0",
-    "nodemon": "^2.0.22"
+    "jsonwebtoken": "^9.0.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
   }
 }

@@ -1,13 +1,12 @@
 import jwt from "jsonwebtoken";
 
 const authMiddleware = (req, res, next) => {
-  // Get token from header
   const token = req.header("Authorization")?.replace("Bearer ", "");
 
   if (!token) {
     return res.status(401).json({ 
       success: false, 
-      message: "No token, authorization denied" 
+      message: "Access denied. No token provided." 
     });
   }
 
@@ -16,9 +15,9 @@ const authMiddleware = (req, res, next) => {
     req.user = decoded;
     next();
   } catch (error) {
-    return res.status(401).json({ 
+    res.status(401).json({ 
       success: false, 
-      message: "Token is not valid" 
+      message: "Invalid token" 
     });
   }
 };

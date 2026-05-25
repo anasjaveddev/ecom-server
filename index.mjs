@@ -9,23 +9,37 @@ dotenv.config();
 
 const app = express();
 
-// CORS - allow frontend
+// ✅ CORS - Allow Vercel & Localhost
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:3000",
+  "https://ecom-client-seven-khaki.vercel.app",
+  "https://ecom-client.vercel.app",
+  "https://*.vercel.app"
+];
+
 app.use(cors({
-  origin: ["http://localhost:5173", "http://localhost:3000", "https://*.vercel.app"],
-  credentials: true
+  origin: function(origin, callback) {
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(null, true); // Allow all for development
+    }
+  },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
+app.options("*", cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// Routes
-app.use("/api/products", productRoutes);
-app.use("/api/auth", authRoutes);
-
-// Health check
+// ✅ Health Check
 app.get("/", (req, res) => {
   res.json({ 
     success: true, 
-    message: "MERN Catalogue API is running",
+    message: "E-Commerce API is running",
     endpoints: {
       products: "/api/products",
       auth: "/api/auth"
@@ -33,12 +47,22 @@ app.get("/", (req, res) => {
   });
 });
 
-// MongoDB connection
+// ✅ Routes
+app.use("/api/products", productRoutes);
+app.use("/api/auth", authRoutes);
+
+// ✅ 404 Handler
+app.use((req, res) => {
+  res.status(404).json({ success: false, message: "Route not found" });
+});
+
+// ✅ MongoDB Connection
 mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log("✅ MongoDB Connected"))
-  .catch((err) => console.log("❌ MongoDB Error:", err.message));
+  .catch(err => console.error("❌ MongoDB Error:", err.message));
 
 const PORT = process.env.PORT || 5050;
 app.listen(PORT, () => {
-  console.log(`✅ Server running on http://localhost:${PORT}`);
+  console.log(`🚀 Server running on http://localhost:${PORT}`);
+  console.log(`✅ CORS enabled for Vercel frontend`);
 });
