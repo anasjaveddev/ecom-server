@@ -23,7 +23,7 @@ app.use(cors({
     if (!origin || allowedOrigins.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
-      callback(null, true); // Allow all for development
+      callback(null, true);
     }
   },
   credentials: true,
@@ -35,7 +35,7 @@ app.options("*", cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// ✅ Health Check
+// Health check
 app.get("/", (req, res) => {
   res.json({ 
     success: true, 
@@ -47,16 +47,16 @@ app.get("/", (req, res) => {
   });
 });
 
-// ✅ Routes
+// Routes
 app.use("/api/products", productRoutes);
 app.use("/api/auth", authRoutes);
 
-// ✅ 404 Handler
+// 404 handler
 app.use((req, res) => {
   res.status(404).json({ success: false, message: "Route not found" });
 });
 
-// ✅ MongoDB Connection
+// MongoDB connection
 mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log("✅ MongoDB Connected"))
   .catch(err => console.error("❌ MongoDB Error:", err.message));
@@ -64,5 +64,4 @@ mongoose.connect(process.env.MONGODB_URI)
 const PORT = process.env.PORT || 5050;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
-  console.log(`✅ CORS enabled for Vercel frontend`);
 });
